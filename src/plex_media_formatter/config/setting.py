@@ -53,7 +53,9 @@ class Settings(BaseSettings):
     def set_default_manifest_path(self):
         if not self.manifest_path:
             self.manifest_path = str(Path(self.plex_library_root) / "manifest.json")
-            
+        if not self.latest_manifest_path:
+            self.latest_manifest_path = str(Path(self.plex_library_root) / "latest_manifest.json")
+                
         return self
         
 settings = Settings()
