@@ -1,5 +1,5 @@
-import time
 import httpx
+import asyncio
 from plex_media_formatter.core.models import EpisodeInfo, SeriesInfo
 from plex_media_formatter.api.base import ApiClient
 
@@ -20,7 +20,7 @@ class JikanClient(ApiClient):
             series = response.json()["data"][0]
             return SeriesInfo(
                 series_id=series["mal_id"],
-                title=series["title"],
+                title=series.get("title_english") or series["title"],
                 year=(
                     int(series["year"]) 
                     if series["year"] 
@@ -53,7 +53,7 @@ class JikanClient(ApiClient):
                 if not body["pagination"]["has_next_page"]:
                     break
                 
-                time.sleep(1)  # be nice to the API
+                await asyncio.sleep(1)  # be nice to the API
                 page += 1
                 
         return episodes
