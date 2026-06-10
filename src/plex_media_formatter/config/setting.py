@@ -34,7 +34,7 @@ class Settings(BaseSettings):
         if self.api_client not in _API_CLIENT:
             raise ValueError(f"Invalid API client. Must be one of {_API_CLIENT}")
         
-        if self.api_client == "tmdb" and not self.api_key:
+        if self.api_client == "tmdb" and not (self.api_key or self.api_token):
             raise ValueError("API_KEY is required when API_CLIENT is 'tmdb'")
         
         return self

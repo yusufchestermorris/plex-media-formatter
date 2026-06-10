@@ -1,6 +1,26 @@
+import re
 import httpx
 from plex_media_formatter.core.models import EpisodeInfo, SeriesInfo
 from plex_media_formatter.api.base import ApiClient
+
+_SEPARATOR_PATTERN = re.compile(r';\s+')
+_SANITIZER_PATTERN = re.compile(r'^\b(?:SA|C|DI|DU|IN)\b(?!-)\s*:?\s*', flags=re.IGNORECASE)
+
+
+def clean_title(raw: str) -> str:
+    """
+    Cleans TMDB metadata prefixes and redundant subtitle noise.
+    """
+    if not raw:
+        return ""
+        
+    clean = _SANITIZER_PATTERN.sub('', raw)
+    
+    if ";" in clean:
+        if _SEPARATOR_PATTERN.search(clean) or _SANITIZER_PATTERN.match(raw):
+            clean = clean.split(";")[0]
+            
+    return clean.strip()
 
 
 class TmdbClient(ApiClient):
@@ -44,7 +64,7 @@ class TmdbClient(ApiClient):
                 year=year
             )
 
-    async def fetch_episodes(self, series_id: int, season: int) -> list[EpisodeInfo]:
+    async def fetch_episodes(self, series_id: int, season: int, clean: bool = False) -> list[EpisodeInfo]:
         url = f"{self.api_url}/tv/{series_id}/season/{season}"
         params = self._params.copy()
 
@@ -62,7 +82,7 @@ class TmdbClient(ApiClient):
                 EpisodeInfo(
                     season=season, 
                     episode=episode["episode_number"], 
-                    title=episode["name"]
+                    title=clean_title(episode["name"]) if clean else episode["name"]
                 )
                 for episode in episodes
             ]
