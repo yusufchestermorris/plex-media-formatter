@@ -83,6 +83,15 @@ def format(  # noqa: A001
             "the next offset from the existing Plex output directory."
         ),
     ),
+    clean_titles: bool = typer.Option(
+        False,
+        "--clean-titles",
+        "-c",
+        help=(
+            "Scrub metadata prefixes (like SA, C, DI) and extra localization subtitles "
+            "from TMDB episode names before renaming."
+        ),
+    ),
     dry_run: bool = typer.Option(
         False,
         "--dry-run",
@@ -104,7 +113,7 @@ def format(  # noqa: A001
 
     with console.status("Querying API…"):
         series_info = asyncio.run(client.fetch_series_info(title))
-        episodes = asyncio.run(client.fetch_episodes(series_info.series_id, season))
+        episodes = asyncio.run(client.fetch_episodes(series_info.series_id, season, clean=clean_titles))
 
     # Detect global episode offset
     resolved_offset = resolve_episode_offset(

@@ -15,7 +15,7 @@ class JikanClient(ApiClient):
         self.api_key = None
         self.api_token = None
 
-    async def fetch_series_info(self, title: str) -> SeriesInfo:
+    async def fetch_series_info(self, title: str, **kwargs) -> SeriesInfo:
         url = f"{self.api_url}/anime"
         
         async with httpx.AsyncClient() as client:
@@ -36,7 +36,7 @@ class JikanClient(ApiClient):
                 year=year
             )
 
-    async def fetch_episodes(self, series_id: int, season: int) -> list[EpisodeInfo]:
+    async def fetch_episodes(self, series_id: int, season: int, **kwargs) -> list[EpisodeInfo]:
         """
         Jikan lacks discrete season endpoints; episodes are fetched from
         pagination. Season number is used only for the output path.

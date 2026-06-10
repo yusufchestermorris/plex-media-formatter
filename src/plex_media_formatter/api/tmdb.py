@@ -41,7 +41,7 @@ class TmdbClient(ApiClient):
         if api_token is not None:
             self._headers = {"Authorization": f"Bearer {api_token}"}
         
-    async def fetch_series_info(self, title: str) -> SeriesInfo:
+    async def fetch_series_info(self, title: str, **kwargs) -> SeriesInfo:
         url = f"{self.api_url}/search/tv"
         params = self._params.copy()
         params["query"] = title
@@ -64,7 +64,7 @@ class TmdbClient(ApiClient):
                 year=year
             )
 
-    async def fetch_episodes(self, series_id: int, season: int, clean: bool = False) -> list[EpisodeInfo]:
+    async def fetch_episodes(self, series_id: int, season: int, clean: bool = False, **kwargs) -> list[EpisodeInfo]:
         url = f"{self.api_url}/tv/{series_id}/season/{season}"
         params = self._params.copy()
 
