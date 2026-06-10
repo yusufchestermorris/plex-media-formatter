@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     api_client: Literal["tmdb", "jikan"] = Field("jikan", alias="API_CLIENT")
     api_url: str | None = Field(None, alias="API_URL")
     api_key: str | None = Field(None, alias="API_KEY")
+    api_token: str | None = Field(None, alias="API_TOKEN")
 
     plex_library_root: str = Field("/mnt/plex/media", alias="PLEX_LIBRARY_ROOT")
     
