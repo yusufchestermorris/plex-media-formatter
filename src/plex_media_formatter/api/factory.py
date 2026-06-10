@@ -21,5 +21,6 @@ def get_api_client(name: str = None) -> ApiClient:
     return client_cls(
         api_url=settings.api_url,
         api_key=settings.api_key,
+        api_token=settings.api_token,
     )   
     
