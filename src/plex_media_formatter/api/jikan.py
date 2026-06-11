@@ -43,7 +43,7 @@ class JikanClient(ApiClient):
         """
         url = f"{self.api_url}/anime/{series_id}/episodes"
         
-        episodes: list[EpisodeInfo] = []
+        all_episodes: list[EpisodeInfo] = []
         page = 1
         async with httpx.AsyncClient() as client:
             while True:
@@ -65,7 +65,7 @@ class JikanClient(ApiClient):
                     episode_number = episode.get("mal_id") or ((page -1) * 100 + idx)
                     title = episode.get("title") or f"Episode {episode_number}"
                     
-                    episodes.append(
+                    all_episodes.append(
                         EpisodeInfo(
                             season=season,
                             episode=episode_number,
