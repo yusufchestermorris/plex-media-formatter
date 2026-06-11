@@ -80,4 +80,4 @@ class JikanClient(ApiClient):
                 await asyncio.sleep(1)  # be nice to the API
                 page += 1
                 
-        return episodes
+        return all_episodes
